@@ -1,3 +1,2 @@
-// 구글 Apps Script 배포 후 받은 웹 앱 URL을 따옴표 안에 붙여 넣으세요.
-// 예: "https://script.google.com/macros/s/AKfy.../exec"
-const SCRIPT_URL = "";
+// 구글 Apps Script 웹 앱 URL
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxkbsiT53ehwaHp5XvZGt666t2bKS9xPnm1AbR9tRNV43D8xzSRUIC1RTb6ozYE__RZvw/exec";
