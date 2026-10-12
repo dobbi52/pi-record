@@ -250,8 +250,17 @@ function enter(b) {
 async function call(params) {
   if (!SCRIPT_URL) throw new Error('config.js에 SCRIPT_URL을 넣어 주세요.');
   const forBan = ban;
-  const q = new URLSearchParams({ ...params, ban: forBan, _: Date.now() });
-  const res = await fetch(SCRIPT_URL + '?' + q.toString());
+  let res;
+  if (params.action) {
+    res = await fetch(SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ ...params, ban: forBan })
+    });
+  } else {
+    const q = new URLSearchParams({ ban: forBan, _: Date.now() });
+    res = await fetch(SCRIPT_URL + '?' + q.toString());
+  }
   const data = await res.json();
   if (!data.ok) throw new Error(data.error || '저장하지 못했어요.');
   if (forBan === ban && data.rows) { rows = data.rows; draw(); }
