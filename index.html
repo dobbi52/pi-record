@@ -15,7 +15,31 @@
 h1{font-family:Jua,sans-serif;font-weight:400;font-size:34px;margin:0;letter-spacing:-.5px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 h1 .badge{font-size:22px;padding:5px 16px}
 .hd p{margin:4px 0 0;color:var(--sub);font-size:17px}
-.hd .chg{font-size:16px;padding:7px 13px;align-self:flex-start;margin-top:6px}
+.qrcard{margin-top:34px;display:block;background:#fff;border:3px solid var(--line);border-radius:24px;padding:14px;box-shadow:0 5px 0 var(--line2);transition:transform .08s;cursor:zoom-in}
+.qrcard:hover{border-color:var(--d);box-shadow:0 5px 0 #b5d0f3}
+.qrcard:active{transform:translateY(3px);box-shadow:0 2px 0 #b5d0f3}
+.qrimg{width:190px;height:190px;display:block}
+.qrimg svg,.qrimg img{width:100%;height:100%;display:block}
+.qrtx{display:flex;flex-direction:column;gap:4px}
+.qrt1{font-family:Jua,sans-serif;font-size:28px}
+.qrt2{font-size:18px;color:var(--sub)}
+.qrt3{font-family:Jua,sans-serif;font-size:16px;color:var(--d);margin-top:4px;word-break:break-all}
+.qrbig{display:inline-flex;align-items:center;gap:6px;margin-top:10px;font-family:Jua,sans-serif;font-size:16px;color:var(--sub);border:2px solid var(--line2);border-radius:12px;padding:5px 12px;align-self:flex-start}
+.qrlay{position:fixed;inset:0;background:rgba(255,247,234,.97);display:none;flex-direction:column;align-items:center;justify-content:center;gap:2.4vh;z-index:20;cursor:pointer;padding:20px}
+.qrlay.on{display:flex}
+.qrlay h2{font-family:Jua,sans-serif;font-weight:400;font-size:clamp(28px,5vh,52px);margin:0}
+.qrlay .bigqr{width:min(68vh,86vw);height:min(68vh,86vw);background:#fff;padding:min(2.4vh,3vw);border-radius:28px;border:3px solid var(--line)}
+.qrlay .bigqr svg,.qrlay .bigqr img{width:100%;height:100%;display:block}
+.qrlay .u{font-family:Jua,sans-serif;font-size:clamp(18px,2.8vh,30px);color:var(--d)}
+.qrlay .x{font-family:Jua,sans-serif;font-size:18px;color:var(--sub);border:2px solid var(--line2);border-radius:12px;padding:6px 16px;background:#fff}
+@media (max-width:640px){.qrcard,.tch{display:none}}
+.tch{margin-top:22px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:center;background:#fff;border:2px dashed var(--line2);border-radius:20px;padding:14px 20px}
+.tchl{display:inline-flex;align-items:center;gap:8px;font-family:Jua,sans-serif;font-size:18px;color:var(--sub)}
+.tchb{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.tchb button{font-family:Jua,sans-serif;font-size:17px;padding:8px 16px;border-radius:12px;border:2px solid var(--line2);background:var(--soft);color:var(--ink)}
+.tchb button:hover{border-color:var(--c);background:var(--cbg);color:var(--cdark)}
+.hd .acts{display:flex;gap:8px;align-self:flex-start;margin-top:6px;flex-wrap:wrap;justify-content:flex-end}
+.hd .chg{font-size:16px;padding:7px 13px}
 .card{background:var(--card);border:2px solid var(--line);border-radius:24px;padding:22px 24px;margin-bottom:18px}
 .top{display:grid;grid-template-columns:230px 1fr;gap:24px;align-items:center}
 @media (max-width:760px){.top{grid-template-columns:1fr}.help{display:none}}
@@ -72,6 +96,13 @@ tr.mine td{background:var(--mintbg)}
   <h1>우리 반을 골라 주세요</h1>
   <p>고른 반의 기록장으로 들어가요.</p>
   <div class="pgrid" id="pgrid"></div>
+  <button class="qrcard" id="qrOpen" aria-label="QR 코드 크게 보기">
+    <span class="qrimg" id="qrSmall"></span>
+  </button>
+  <div class="tch">
+    <span class="tchl"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg>앞 모니터 화면 열기</span>
+    <div class="tchb" id="boardBtns"></div>
+  </div>
 </div>
 
 <div class="wrap hidden" id="mainView">
@@ -81,7 +112,9 @@ tr.mine td{background:var(--mintbg)}
       <h1>원주율 탐구 기록장 <span class="badge" id="badge"></span></h1>
       <p>둥근 물건의 지름과 원주를 재서 적어 보세요. 원주 ÷ 지름은 자동으로 계산돼요!</p>
     </div>
-    <button class="chg" id="chg">반 바꾸기</button>
+    <div class="acts">
+      <button class="chg" id="chg">반 바꾸기</button>
+    </div>
   </div>
 
   <div class="card"><div class="top">
@@ -112,6 +145,12 @@ tr.mine td{background:var(--mintbg)}
   </div>
 </div>
 
+<div class="qrlay" id="qrLay" role="dialog" aria-modal="true" aria-label="QR 코드">
+  <h2>휴대폰 카메라로 찍어 보세요</h2>
+  <div class="bigqr" id="qrBig"></div>
+  <button class="x" id="qrClose">닫기</button>
+</div>
+
 <div class="dlg" id="dlg" role="dialog" aria-modal="true">
   <div class="box">
     <p id="dlgText">정말 지울까요?</p>
@@ -119,6 +158,7 @@ tr.mine td{background:var(--mintbg)}
   </div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
 <script src="config.js"></script>
 <script>
 const $ = id => document.getElementById(id);
@@ -136,6 +176,23 @@ $('pgrid').addEventListener('click', e => {
   const b = e.target.closest('.pbtn'); if (b) enter(b.dataset.ban);
 });
 $('chg').onclick = () => { store.set(null); ban = null; show(); };
+const homeUrl = location.origin + location.pathname.replace(/index\.html$/, '');
+try {
+  const qr = qrcode(0, 'M'); qr.addData(homeUrl); qr.make();
+  const svg = qr.createSvgTag({ cellSize: 4, margin: 2, scalable: true });
+  $('qrSmall').innerHTML = svg; $('qrBig').innerHTML = svg;
+} catch (e) { $('qrOpen').classList.add('hidden'); }
+$('qrOpen').onclick = () => $('qrLay').classList.add('on');
+$('qrLay').onclick = () => $('qrLay').classList.remove('on');
+document.addEventListener('keydown', e => { if (e.key === 'Escape') $('qrLay').classList.remove('on'); });
+
+$('boardBtns').innerHTML = [1, 2, 3, 4, 5].map(n => `<button data-ban="${n}">${n}반</button>`).join('');
+$('boardBtns').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  const url = new URL('board.html', location.href);
+  url.searchParams.set('ban', b.dataset.ban);
+  window.open(url.toString(), 'pi_board');
+});
 
 function show() {
   $('pickView').classList.toggle('hidden', !!ban);

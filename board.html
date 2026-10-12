@@ -104,6 +104,7 @@ function show() {
 
 function enter(b) {
   ban = String(b); store.set(ban); rows = []; lastSig = null;
+  try { history.replaceState(null, '', location.pathname); } catch (e) {}
   $('badge').textContent = '6학년 ' + ban + '반';
   document.title = '원주율 탐구 · 6학년 ' + ban + '반';
   setLive(true, '불러오는 중…');
@@ -214,7 +215,8 @@ async function refresh() {
   }
 }
 
-const saved = store.get();
+const fromUrl = new URLSearchParams(location.search).get('ban');
+const saved = /^[1-5]$/.test(fromUrl || '') ? fromUrl : store.get();
 if (saved && /^[1-5]$/.test(saved)) enter(saved); else show();
 setInterval(refresh, 4000);
 </script>
