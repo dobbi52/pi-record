@@ -1,0 +1,26 @@
+:root{
+  --bg:#fff7ea;--ink:#2d2a26;--sub:#7a7368;--line:#f0e4cf;--line2:#eadcc3;--card:#fff;--soft:#fffaf2;
+  --d:#3b82d6;--dbg:#e3efff;--c:#f08a3c;--cdark:#c4621c;--cbg:#ffeedd;--r:#8b5cf6;--rbg:#efe8ff;
+  --mint:#2bb39a;--mintdark:#1f8a76;--mintbg:#e7f8f3;--red:#d2463b;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);font-family:"Gowun Dodum","Noto Sans KR",sans-serif;color:var(--ink)}
+button{font-family:inherit;cursor:pointer}
+.jua{font-family:"Jua","Noto Sans KR",sans-serif;font-weight:400}
+
+/* 반 선택 화면 */
+.picker{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px 20px;text-align:center}
+.picker h1{font-family:Jua,sans-serif;font-weight:400;font-size:40px;margin:14px 0 6px}
+.picker p{margin:0 0 34px;color:var(--sub);font-size:20px}
+.pgrid{display:grid;grid-template-columns:repeat(5,150px);gap:18px}
+@media (max-width:860px){.pgrid{grid-template-columns:repeat(3,140px)}}
+.pbtn{height:150px;border-radius:28px;background:#fff;border:3px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:Jua,sans-serif;box-shadow:0 5px 0 var(--line2);color:var(--ink);transition:transform .08s}
+.pbtn:hover{border-color:var(--mint);background:var(--mintbg);box-shadow:0 5px 0 var(--mint)}
+.pbtn:active{transform:translateY(4px);box-shadow:0 1px 0 var(--mint)}
+.pbtn .g{font-size:18px;color:var(--sub)}
+.pbtn .n{font-size:54px;line-height:1.1}
+
+.badge{font-family:Jua,sans-serif;background:var(--mint);color:#fff;border-radius:99px;white-space:nowrap}
+.chg{font-family:Jua,sans-serif;color:var(--sub);border:2px solid var(--line2);border-radius:12px;background:#fff;white-space:nowrap}
+.chg:hover{border-color:var(--mint);color:var(--mintdark)}
+.hidden{display:none !important}

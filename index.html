@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>원주율 탐구 기록장</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Jua&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="common.css">
+<style>
+.wrap{max-width:920px;margin:0 auto;padding:26px 22px 60px}
+.hd{display:flex;align-items:center;gap:16px;margin-bottom:20px}
+.hd .t{flex:1;min-width:0}
+h1{font-family:Jua,sans-serif;font-weight:400;font-size:34px;margin:0;letter-spacing:-.5px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+h1 .badge{font-size:22px;padding:5px 16px}
+.hd p{margin:4px 0 0;color:var(--sub);font-size:17px}
+.hd .chg{font-size:16px;padding:7px 13px;align-self:flex-start;margin-top:6px}
+.card{background:var(--card);border:2px solid var(--line);border-radius:24px;padding:22px 24px;margin-bottom:18px}
+.top{display:grid;grid-template-columns:230px 1fr;gap:24px;align-items:center}
+@media (max-width:760px){.top{grid-template-columns:1fr}.help{display:none}}
+.help{background:var(--soft);border:2px dashed var(--line);border-radius:20px;padding:12px 10px 14px;text-align:center}
+.fm{font-family:Jua,sans-serif;font-size:19px;margin-top:6px}
+.pill{display:inline-block;padding:1px 10px;border-radius:99px;font-family:Jua,sans-serif}
+.pd{background:var(--dbg);color:var(--d)}.pc{background:var(--cbg);color:var(--cdark)}.pr{background:var(--rbg);color:var(--r)}
+.f{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.full{grid-column:1/-1}
+.fld label{display:flex;align-items:center;gap:8px;font-family:Jua,sans-serif;font-size:18px;margin-bottom:6px}
+.num{width:24px;height:24px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:14px;color:#fff;flex:none}
+.unit{font-family:"Gowun Dodum",sans-serif;font-size:14px;color:var(--sub)}
+.fld input{width:100%;height:54px;border-radius:16px;border:2px solid var(--line);background:#fffdf9;font-size:21px;padding:0 16px;font-family:Jua,sans-serif;color:var(--ink)}
+.fld input::placeholder{color:#c9bfae;font-family:"Gowun Dodum",sans-serif}
+.fld input:focus{outline:none;border-color:var(--mint);box-shadow:0 0 0 4px var(--mintbg)}
+.fld.d input{border-color:#cfe1fb}.fld.c input{border-color:#fdd9bc}.fld.r input{border-color:#ddd0fd}
+.fld.d input:focus{border-color:var(--d);box-shadow:0 0 0 4px var(--dbg)}
+.fld.c input:focus{border-color:var(--c);box-shadow:0 0 0 4px var(--cbg)}
+.fld.r input:focus{border-color:var(--r);box-shadow:0 0 0 4px var(--rbg)}
+.fld.r input[readonly]{background:var(--rbg);border-color:#ddd0fd;color:var(--r);font-size:26px;cursor:default}
+.fld.r input[readonly]:focus{box-shadow:none}
+.go{display:flex;align-items:center;gap:14px;margin-top:18px;flex-wrap:wrap}
+.btn{height:56px;padding:0 30px;border:0;border-radius:18px;background:var(--mint);color:#fff;font-family:Jua,sans-serif;font-size:22px;display:inline-flex;align-items:center;gap:8px;box-shadow:0 4px 0 var(--mintdark)}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--mintdark)}
+.btn:disabled{opacity:.6}
+.msg{font-family:Jua,sans-serif;font-size:18px}
+.msg.ok{color:var(--mint)}.msg.err{color:var(--red)}.msg.wait{color:var(--sub)}
+.ct{font-family:Jua,sans-serif;font-size:22px;margin:0 0 8px;display:flex;align-items:center;gap:8px}
+.ct small{font-family:"Gowun Dodum",sans-serif;font-size:16px;color:var(--sub)}
+table{width:100%;border-collapse:separate;border-spacing:0 6px;font-size:19px}
+th{font-family:Jua,sans-serif;font-weight:400;color:var(--sub);font-size:16px;text-align:left;padding:0 12px 2px}
+td{padding:10px 12px;background:var(--soft)}
+td:first-child{border-radius:14px 0 0 14px;font-family:Jua,sans-serif;word-break:break-all}
+td:last-child{border-radius:0 14px 14px 0}
+.n{text-align:right;font-family:Jua,sans-serif}
+tr.mine td{background:var(--mintbg)}
+.rv{background:var(--rbg);color:var(--r);padding:3px 12px;border-radius:99px}
+.del{border:2px solid #f6c9c4;background:#fff;color:var(--red);border-radius:12px;padding:5px 12px;font-family:Jua,sans-serif;font-size:15px}
+.empty td{background:none;text-align:center;color:var(--sub);font-family:"Gowun Dodum",sans-serif;padding:24px 0}
+.dlg{position:fixed;inset:0;background:rgba(45,42,38,.45);display:none;align-items:center;justify-content:center;padding:20px;z-index:10}
+.dlg.on{display:flex}
+.box{background:#fff;border-radius:24px;padding:28px 26px 22px;max-width:400px;width:100%;text-align:center}
+.box p{font-family:Jua,sans-serif;font-size:21px;margin:10px 0 22px;line-height:1.5}
+.box .bt{display:flex;gap:10px;justify-content:center}
+.box button{height:50px;padding:0 26px;font-size:18px;border-radius:14px;font-family:Jua,sans-serif}
+.no{background:#fff;border:2px solid var(--line2);color:var(--ink)}
+.yes{background:var(--red);border:0;color:#fff}
+</style>
+</head>
+<body>
+
+<div class="picker hidden" id="pickView">
+  <svg width="90" height="90" viewBox="0 0 74 74" aria-hidden="true"><circle cx="37" cy="37" r="31" fill="#fff" stroke="#f08a3c" stroke-width="5"/><line x1="8" y1="37" x2="66" y2="37" stroke="#3b82d6" stroke-width="4" stroke-linecap="round"/><circle cx="27" cy="27" r="3.5" fill="#2d2a26"/><circle cx="47" cy="27" r="3.5" fill="#2d2a26"/><path d="M29 46 q8 7 16 0" stroke="#2d2a26" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="20" cy="44" r="4" fill="#ffc6b0"/><circle cx="54" cy="44" r="4" fill="#ffc6b0"/></svg>
+  <h1>우리 반을 골라 주세요</h1>
+  <p>고른 반의 기록장으로 들어가요.</p>
+  <div class="pgrid" id="pgrid"></div>
+</div>
+
+<div class="wrap hidden" id="mainView">
+  <div class="hd">
+    <svg width="74" height="74" viewBox="0 0 74 74" aria-hidden="true" style="flex:none"><circle cx="37" cy="37" r="31" fill="#fff" stroke="#f08a3c" stroke-width="5"/><line x1="8" y1="37" x2="66" y2="37" stroke="#3b82d6" stroke-width="4" stroke-linecap="round"/><circle cx="27" cy="27" r="3.5" fill="#2d2a26"/><circle cx="47" cy="27" r="3.5" fill="#2d2a26"/><path d="M29 46 q8 7 16 0" stroke="#2d2a26" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="20" cy="44" r="4" fill="#ffc6b0"/><circle cx="54" cy="44" r="4" fill="#ffc6b0"/></svg>
+    <div class="t">
+      <h1>원주율 탐구 기록장 <span class="badge" id="badge"></span></h1>
+      <p>둥근 물건의 지름과 원주를 재서 적어 보세요. 원주 ÷ 지름은 자동으로 계산돼요!</p>
+    </div>
+    <button class="chg" id="chg">반 바꾸기</button>
+  </div>
+
+  <div class="card"><div class="top">
+    <div class="help">
+      <svg width="190" height="150" viewBox="0 0 190 150" aria-hidden="true"><defs><marker id="ar" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0 L10 5 L0 10z" fill="#c4621c"/></marker></defs><circle cx="95" cy="72" r="56" fill="#fff" stroke="#f08a3c" stroke-width="7"/><line x1="39" y1="72" x2="151" y2="72" stroke="#3b82d6" stroke-width="6" stroke-linecap="round"/><circle cx="39" cy="72" r="5" fill="#3b82d6"/><circle cx="151" cy="72" r="5" fill="#3b82d6"/><text x="95" y="62" font-family="Jua" font-size="18" fill="#3b82d6" text-anchor="middle">지름</text><text x="95" y="146" font-family="Jua" font-size="18" fill="#c4621c" text-anchor="middle">원주 (원의 둘레)</text><path d="M60 22 a56 56 0 0 1 22 -6" stroke="#c4621c" stroke-width="3" fill="none" marker-end="url(#ar)"/></svg>
+      <div class="fm"><span class="pill pc">원주</span> ÷ <span class="pill pd">지름</span> = <span class="pill pr">?</span></div>
+    </div>
+    <div>
+      <div class="f">
+        <div class="fld full"><label for="nm"><span class="num" style="background:var(--mint)">1</span>무엇을 재었나요?</label><input id="nm" maxlength="20" placeholder="예) 컵 뚜껑" autocomplete="off"></div>
+        <div class="fld d"><label for="d"><span class="num" style="background:var(--d)">2</span>지름 <span class="unit">(cm)</span></label><input id="d" type="number" inputmode="decimal" step="any" placeholder="예) 8.5"></div>
+        <div class="fld c"><label for="c"><span class="num" style="background:var(--c)">3</span>원주 <span class="unit">(cm)</span></label><input id="c" type="number" inputmode="decimal" step="any" placeholder="예) 26.8"></div>
+        <div class="fld r full"><label for="r"><span class="num" style="background:var(--r)">4</span>원주 ÷ 지름 <span class="unit">자동으로 계산돼요 (소수 둘째 자리까지)</span></label><input id="r" readonly tabindex="-1" placeholder="지름과 원주를 적으면 계산돼요"></div>
+      </div>
+      <div class="go">
+        <button class="btn" id="add"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>기록하기</button>
+        <span class="msg" id="msg"></span>
+      </div>
+    </div>
+  </div></div>
+
+  <div class="card">
+    <p class="ct"><span id="tblTitle"></span> <small id="cnt"></small></p>
+    <table>
+      <thead><tr><th>물건</th><th class="n">지름</th><th class="n">원주</th><th class="n">원주 ÷ 지름</th><th></th></tr></thead>
+      <tbody id="tb"></tbody>
+    </table>
+  </div>
+</div>
+
+<div class="dlg" id="dlg" role="dialog" aria-modal="true">
+  <div class="box">
+    <p id="dlgText">정말 지울까요?</p>
+    <div class="bt"><button class="no" id="dlgNo">취소</button><button class="yes" id="dlgYes">지우기</button></div>
+  </div>
+</div>
+
+<script src="config.js"></script>
+<script>
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+const KEY = 'pi_record_ban';
+const store = {
+  get() { try { return localStorage.getItem(KEY); } catch (e) { return null; } },
+  set(v) { try { v ? localStorage.setItem(KEY, v) : localStorage.removeItem(KEY); } catch (e) {} }
+};
+let ban = null, rows = [], busy = false, pendingDel = null, mineIds = new Set();
+
+$('pgrid').innerHTML = [1, 2, 3, 4, 5].map(n =>
+  `<button class="pbtn" data-ban="${n}"><span class="g">6학년</span><span class="n">${n}반</span></button>`).join('');
+$('pgrid').addEventListener('click', e => {
+  const b = e.target.closest('.pbtn'); if (b) enter(b.dataset.ban);
+});
+$('chg').onclick = () => { store.set(null); ban = null; show(); };
+
+function show() {
+  $('pickView').classList.toggle('hidden', !!ban);
+  $('mainView').classList.toggle('hidden', !ban);
+}
+
+function enter(b) {
+  ban = String(b); store.set(ban); rows = []; mineIds = new Set();
+  $('badge').textContent = '6학년 ' + ban + '반';
+  $('tblTitle').textContent = '6학년 ' + ban + '반 기록';
+  document.title = '원주율 탐구 기록장 · 6학년 ' + ban + '반';
+  say('');
+  $('tb').innerHTML = '<tr class="empty"><td colspan="5">불러오는 중…</td></tr>';
+  $('cnt').textContent = '';
+  show(); window.scrollTo(0, 0);
+  refresh();
+}
+
+async function call(params) {
+  if (!SCRIPT_URL) throw new Error('config.js에 SCRIPT_URL을 넣어 주세요.');
+  const forBan = ban;
+  const q = new URLSearchParams({ ...params, ban: forBan, _: Date.now() });
+  const res = await fetch(SCRIPT_URL + '?' + q.toString());
+  const data = await res.json();
+  if (!data.ok) throw new Error(data.error || '저장하지 못했어요.');
+  if (forBan === ban && data.rows) { rows = data.rows; draw(); }
+  return data;
+}
+
+function draw() {
+  const list = rows.slice().sort((a, b) => b.t - a.t);
+  $('cnt').textContent = '(' + list.length + '개)';
+  $('tb').innerHTML = list.length ? list.map(r =>
+    `<tr${mineIds.has(r.id) ? ' class="mine"' : ''}><td>${esc(r.name)}</td><td class="n">${r.d}</td><td class="n">${r.c}</td><td class="n"><span class="rv">${r.r}</span></td>` +
+    `<td class="n"><button class="del" data-id="${esc(r.id)}" data-name="${esc(r.name)}">지우기</button></td></tr>`
+  ).join('') : '<tr class="empty"><td colspan="5">아직 기록이 없어요. 첫 기록을 남겨 보세요!</td></tr>';
+}
+
+function say(text, kind) { $('msg').textContent = text; $('msg').className = 'msg ' + (kind || ''); }
+
+$('add').onclick = async () => {
+  if (busy) return;
+  const name = $('nm').value.trim(), d = parseFloat($('d').value), c = parseFloat($('c').value);
+  if (!name) { say('무엇을 재었는지 적어 주세요.', 'err'); $('nm').focus(); return; }
+  if (!(d > 0)) { say('지름을 숫자로 적어 주세요.', 'err'); $('d').focus(); return; }
+  if (!(c > 0)) { say('원주를 숫자로 적어 주세요.', 'err'); $('c').focus(); return; }
+  const r = ratio(d, c);
+  busy = true; $('add').disabled = true; say('기록하는 중…', 'wait');
+  const before = new Set(rows.map(x => x.id));
+  try {
+    await call({ action: 'add', name, d, c, r });
+    rows.forEach(x => { if (!before.has(x.id) && x.name === name) mineIds.add(x.id); });
+    draw();
+    ['nm', 'd', 'c', 'r'].forEach(i => $(i).value = '');
+    say('기록했어요! 앞 화면을 확인해 보세요.', 'ok');
+  } catch (e) { say(e.message, 'err'); }
+  busy = false; $('add').disabled = false;
+};
+
+function ratio(d, c) { return Math.round(c / d * 100) / 100; }
+function calc() {
+  const d = parseFloat($('d').value), c = parseFloat($('c').value);
+  $('r').value = d > 0 && c > 0 ? ratio(d, c).toFixed(2) : '';
+}
+['d', 'c'].forEach(i => $(i).addEventListener('input', calc));
+['nm', 'd', 'c'].forEach(i => $(i).addEventListener('input', () => { if ($('msg').classList.contains('err')) say(''); }));
+['nm', 'd', 'c'].forEach((i, k, a) => $(i).addEventListener('keydown', e => {
+  if (e.key === 'Enter') { e.preventDefault(); k < a.length - 1 ? $(a[k + 1]).focus() : $('add').click(); }
+}));
+
+$('tb').addEventListener('click', e => {
+  const b = e.target.closest('.del'); if (!b) return;
+  pendingDel = b.dataset.id;
+  $('dlgText').textContent = `'${b.dataset.name}' 기록을 정말 지울까요?`;
+  $('dlg').classList.add('on');
+});
+$('dlgNo').onclick = () => { pendingDel = null; $('dlg').classList.remove('on'); };
+$('dlg').addEventListener('click', e => { if (e.target === $('dlg')) $('dlgNo').click(); });
+$('dlgYes').onclick = async () => {
+  const id = pendingDel; $('dlg').classList.remove('on'); pendingDel = null;
+  if (!id) return;
+  rows = rows.filter(r => r.id !== id); draw();
+  try { await call({ action: 'delete', id }); say('지웠어요.', 'ok'); }
+  catch (e) { say(e.message, 'err'); refresh(); }
+};
+
+async function refresh() {
+  if (!ban || busy || pendingDel) return;
+  try { await call({}); }
+  catch (e) { if (!rows.length) $('tb').innerHTML = `<tr class="empty"><td colspan="5">${esc(e.message)}</td></tr>`; }
+}
+
+const saved = store.get();
+if (saved && /^[1-5]$/.test(saved)) enter(saved); else show();
+setInterval(refresh, 10000);
+</script>
+</body>
+</html>
