@@ -32,7 +32,6 @@ h1 .badge{font-size:22px;padding:5px 16px}
 .qrlay .bigqr svg,.qrlay .bigqr img{width:100%;height:100%;display:block}
 .qrlay .u{font-family:Jua,sans-serif;font-size:clamp(18px,2.8vh,30px);color:var(--d)}
 .qrlay .x{font-family:Jua,sans-serif;font-size:18px;color:var(--sub);border:2px solid var(--line2);border-radius:12px;padding:6px 16px;background:#fff}
-@media (max-width:640px){.qrcard,.tch{display:none}}
 .tch{margin-top:22px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:center;background:#fff;border:2px dashed var(--line2);border-radius:20px;padding:14px 20px}
 .tchl{display:inline-flex;align-items:center;gap:8px;font-family:Jua,sans-serif;font-size:18px;color:var(--sub)}
 .tchb{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
@@ -87,6 +86,43 @@ tr.mine td{background:var(--mintbg)}
 .box button{height:50px;padding:0 26px;font-size:18px;border-radius:14px;font-family:Jua,sans-serif}
 .no{background:#fff;border:2px solid var(--line2);color:var(--ink)}
 .yes{background:var(--red);border:0;color:#fff}
+th,.del{white-space:nowrap}
+
+/* 휴대폰 화면 */
+@media (max-width:640px){
+  .qrcard,.tch{display:none}
+  .picker{padding:24px 16px}
+  .picker svg{width:70px;height:70px}
+  .picker h1{font-size:30px}
+  .picker p{font-size:17px;margin-bottom:24px}
+  .pgrid{grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;width:100%;max-width:400px}
+  .pbtn{height:104px;border-radius:22px}
+  .pbtn .g{font-size:15px}
+  .pbtn .n{font-size:38px}
+
+  .wrap{padding:16px 12px 40px}
+  .hd{gap:10px;margin-bottom:14px;flex-wrap:wrap}
+  .hd>svg{display:none}
+  h1{font-size:24px;gap:8px;word-break:keep-all}
+  h1 .badge{font-size:16px;padding:3px 12px}
+  .hd p{font-size:14px}
+  .hd .acts{margin-top:0}
+  .hd .chg{font-size:14px;padding:5px 10px}
+  .card{padding:16px 14px;border-radius:20px}
+  .f{gap:12px}
+  .fld label{font-size:16px;flex-wrap:wrap;row-gap:2px}
+  .unit{font-size:12px}
+  .fld input{height:50px;font-size:19px;padding:0 12px;border-radius:14px}
+  .fld.r input[readonly]{font-size:22px}
+  .btn{width:100%;justify-content:center}
+  .ct{font-size:19px}
+  table{font-size:15px;border-spacing:0 5px}
+  th{font-size:12px;padding:0 6px 2px}
+  td{padding:9px 6px}
+  td:first-child{word-break:keep-all;overflow-wrap:anywhere}
+  .rv{padding:2px 8px}
+  .del{font-size:13px;padding:4px 8px;border-radius:10px}
+}
 </style>
 </head>
 <body>
@@ -127,7 +163,7 @@ tr.mine td{background:var(--mintbg)}
         <div class="fld full"><label for="nm"><span class="num" style="background:var(--mint)">1</span>무엇을 재었나요?</label><input id="nm" maxlength="20" placeholder="예) 컵 뚜껑" autocomplete="off"></div>
         <div class="fld d"><label for="d"><span class="num" style="background:var(--d)">2</span>지름 <span class="unit">(cm)</span></label><input id="d" type="number" inputmode="decimal" step="any" placeholder="예) 8.5"></div>
         <div class="fld c"><label for="c"><span class="num" style="background:var(--c)">3</span>원주 <span class="unit">(cm)</span></label><input id="c" type="number" inputmode="decimal" step="any" placeholder="예) 26.8"></div>
-        <div class="fld r full"><label for="r"><span class="num" style="background:var(--r)">4</span>원주 ÷ 지름 <span class="unit">자동으로 계산돼요 (소수 둘째 자리까지)</span></label><input id="r" readonly tabindex="-1" placeholder="지름과 원주를 적으면 계산돼요"></div>
+        <div class="fld r full"><label for="r"><span class="num" style="background:var(--r)">4</span>원주 ÷ 지름 <span class="unit">자동으로 계산돼요 (소수 둘째 자리까지)</span></label><input id="r" readonly tabindex="-1" placeholder="자동 계산"></div>
       </div>
       <div class="go">
         <button class="btn" id="add"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>기록하기</button>
@@ -241,14 +277,31 @@ $('add').onclick = async () => {
   if (!(c > 0)) { say('원주를 숫자로 적어 주세요.', 'err'); $('c').focus(); return; }
   const r = ratio(d, c);
   busy = true; $('add').disabled = true; say('기록하는 중…', 'wait');
-  const before = new Set(rows.map(x => x.id));
-  try {
-    await call({ action: 'add', name, d, c, r });
-    rows.forEach(x => { if (!before.has(x.id) && x.name === name) mineIds.add(x.id); });
-    draw();
+  const cid = 'c' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+  const saved = () => rows.some(x => x.id === cid);
+  const done = () => {
+    mineIds.add(cid); draw();
     ['nm', 'd', 'c', 'r'].forEach(i => $(i).value = '');
     say('기록했어요! 앞 화면을 확인해 보세요.', 'ok');
-  } catch (e) { say(e.message, 'err'); }
+  };
+  try {
+    await call({ action: 'add', name, d, c, r, cid });
+    done();
+  } catch (e) {
+    if (e.name !== 'TypeError') { say(e.message, 'err'); }
+    else {
+      let ok = false;
+      for (let i = 0; i < 2 && !ok; i++) {
+        say('연결을 다시 확인하는 중…', 'wait');
+        await new Promise(res => setTimeout(res, 1500));
+        try { await call({}); } catch (_) {}
+        if (saved()) { ok = true; break; }
+        try { await call({ action: 'add', name, d, c, r, cid }); ok = true; } catch (_) {}
+      }
+      if (ok || saved()) done();
+      else say('연결이 잠깐 끊겼어요. 잠시 뒤 다시 눌러 주세요.', 'err');
+    }
+  }
   busy = false; $('add').disabled = false;
 };
 
@@ -276,13 +329,16 @@ $('dlgYes').onclick = async () => {
   if (!id) return;
   rows = rows.filter(r => r.id !== id); draw();
   try { await call({ action: 'delete', id }); say('지웠어요.', 'ok'); }
-  catch (e) { say(e.message, 'err'); refresh(); }
+  catch (e) { say(e.name === 'TypeError' ? '연결이 잠깐 끊겼어요. 다시 지워 주세요.' : e.message, 'err'); refresh(); }
 };
 
 async function refresh() {
   if (!ban || busy || pendingDel) return;
   try { await call({}); }
-  catch (e) { if (!rows.length) $('tb').innerHTML = `<tr class="empty"><td colspan="5">${esc(e.message)}</td></tr>`; }
+  catch (e) {
+    const m = e.name === 'TypeError' ? '연결을 기다리는 중이에요…' : e.message;
+    if (!rows.length) $('tb').innerHTML = `<tr class="empty"><td colspan="5">${esc(m)}</td></tr>`;
+  }
 }
 
 const saved = store.get();
