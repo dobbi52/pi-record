@@ -18,21 +18,21 @@ body.board{overflow:hidden}
 h1{font-family:Jua,sans-serif;font-weight:400;font-size:clamp(30px,4.8vh,52px);margin:0;letter-spacing:-.5px;display:flex;align-items:center;gap:14px;white-space:nowrap}
 h1 .badge{font-size:.6em;padding:.2em .7em}
 .right{display:flex;align-items:center;gap:12px}
-.live{font-family:Jua,sans-serif;font-size:clamp(16px,2.2vh,24px);color:var(--sub);background:#fff;border:2px solid var(--line);border-radius:99px;padding:.35em 1em;white-space:nowrap}
+.live{font-family:Jua,sans-serif;font-size:clamp(18px,2.6vh,28px);color:var(--sub);background:#fff;border:2px solid var(--line);border-radius:99px;padding:.35em 1em;white-space:nowrap}
 .live b{display:inline-block;width:.6em;height:.6em;border-radius:50%;background:var(--mint);margin-right:.45em;box-shadow:0 0 0 .22em #d3f2ea;vertical-align:.05em}
 .live.off b{background:var(--red);box-shadow:0 0 0 .22em #fbe0dd}
-.right .chg{font-size:clamp(14px,1.8vh,20px);padding:.45em .9em}
-.main{flex:1;display:grid;grid-template-columns:1.8fr 1fr;gap:1.4vw;min-height:0}
+.right .chg{font-size:clamp(16px,2.2vh,24px);padding:.45em .9em}
+.main{flex:1;display:grid;grid-template-columns:1.55fr 1fr;gap:1.4vw;min-height:0}
 .card{background:#fff;border:2px solid var(--line);border-radius:28px;padding:2.2vh 1.5vw;display:flex;flex-direction:column;min-height:0}
-.ct{font-family:Jua,sans-serif;font-size:clamp(22px,2.8vh,30px);margin:0 0 .3em;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
-.tag{font-size:.72em;background:var(--cbg);color:var(--cdark);border-radius:99px;padding:.15em .75em}
+.ct{font-family:Jua,sans-serif;font-size:clamp(26px,3.5vh,38px);margin:0 0 .3em;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.tag{font-size:.8em;background:var(--cbg);color:var(--cdark);border-radius:99px;padding:.15em .75em}
 .tag:empty{display:none}
-.cap{font-size:clamp(15px,1.9vh,20px);color:var(--sub);margin:0}
+.cap{font-size:clamp(18px,2.5vh,27px);color:var(--sub);margin:0}
 svg.plot{flex:1;width:100%;min-height:0}
 .scroll{flex:1;overflow-y:auto;min-height:0;margin-right:-8px;padding-right:8px}
-table{width:100%;border-collapse:separate;border-spacing:0 .25em;font-size:clamp(18px,2.6vh,28px)}
-thead th{position:sticky;top:0;background:#fff;z-index:1;font-family:Jua,sans-serif;font-weight:400;color:var(--sub);font-size:.72em;text-align:left;padding:.2em .45em .3em}
-td{padding:.4em .45em;background:var(--soft);font-family:Jua,sans-serif}
+table{width:100%;border-collapse:separate;border-spacing:0 .22em;font-size:clamp(24px,3.6vh,40px)}
+thead th{position:sticky;top:0;background:#fff;z-index:1;font-family:Jua,sans-serif;font-weight:400;color:var(--sub);font-size:.62em;text-align:left;padding:.2em .5em .3em}
+td{padding:.3em .5em;background:var(--soft);font-family:Jua,sans-serif}
 td:first-child{border-radius:16px 0 0 16px;word-break:break-all}
 td:last-child{border-radius:0 16px 16px 0}
 .n{text-align:right}
@@ -54,7 +54,7 @@ tr.new td{background:var(--cbg)}
   <div class="top">
     <div class="ttl">
       <svg viewBox="0 0 74 74" aria-hidden="true"><circle cx="37" cy="37" r="31" fill="#fff" stroke="#f08a3c" stroke-width="5"/><line x1="8" y1="37" x2="66" y2="37" stroke="#3b82d6" stroke-width="4" stroke-linecap="round"/><circle cx="27" cy="27" r="3.5" fill="#2d2a26"/><circle cx="47" cy="27" r="3.5" fill="#2d2a26"/><path d="M29 46 q8 7 16 0" stroke="#2d2a26" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="20" cy="44" r="4" fill="#ffc6b0"/><circle cx="54" cy="44" r="4" fill="#ffc6b0"/></svg>
-      <h1><span class="badge" id="badge"></span>원주 ÷ 지름, 우리 반은 얼마나 나왔을까?</h1>
+      <h1><span class="badge" id="badge"></span>원주는 지름의 몇 배일까?</h1>
     </div>
     <div class="right">
       <span class="live" id="live"><b></b><span id="liveText">불러오는 중…</span></span>
@@ -137,20 +137,19 @@ function drawPlot(list, latestId) {
     const x = X(k);
     if (k % 10 === 0) {
       s += `<rect x="${x - 2.5}" y="${base - 6}" width="5" height="26" rx="2.5" fill="#b9ab93"/>`;
-      s += `<text x="${x}" y="${base + 60}" font-family="Jua" font-size="34" fill="#2d2a26" text-anchor="middle">${(k / 100).toFixed(1)}</text>`;
+      s += `<text x="${x}" y="${base + 66}" font-family="Jua" font-size="42" fill="#2d2a26" text-anchor="middle">${(k / 100).toFixed(1)}</text>`;
     } else if (k % 5 === 0) {
       s += `<rect x="${x - 1.5}" y="${base + 6}" width="3" height="11" rx="1.5" fill="#d3c6af"/>`;
     } else {
       s += `<rect x="${x - 1}" y="${base + 6}" width="2" height="6" rx="1" fill="#e2d6c2"/>`;
     }
   }
-  s += `<text x="${(L + R) / 2}" y="${base + 104}" font-family="Gowun Dodum" font-size="22" fill="#7a7368" text-anchor="middle">원주 ÷ 지름</text>`;
+  s += `<text x="${(L + R) / 2}" y="${base + 112}" font-family="Gowun Dodum" font-size="28" fill="#7a7368" text-anchor="middle">원주 ÷ 지름</text>`;
 
   [['L', LX, '3.0보다', '작아요'], ['R', RX, '3.3보다', '커요']].forEach(([k, x, t1, t2]) => {
     s += `<rect x="${x - 46}" y="${topY}" width="92" height="${base - topY + 6}" rx="18" fill="#faf6ef" stroke="#e2d8c6" stroke-width="2" stroke-dasharray="6 6"/>`;
-    s += `<text x="${x}" y="${base + 38}" font-family="Jua" font-size="19" fill="#9b9283" text-anchor="middle">${t1}</text>`;
-    s += `<text x="${x}" y="${base + 60}" font-family="Jua" font-size="19" fill="#9b9283" text-anchor="middle">${t2}</text>`;
-    s += `<text x="${x}" y="${base + 84}" font-family="Gowun Dodum" font-size="15" fill="#9b9283" text-anchor="middle">다시 재 볼까요?</text>`;
+    s += `<text x="${x}" y="${base + 40}" font-family="Jua" font-size="23" fill="#9b9283" text-anchor="middle">${t1}</text>`;
+    s += `<text x="${x}" y="${base + 66}" font-family="Jua" font-size="23" fill="#9b9283" text-anchor="middle">${t2}</text>`;
   });
 
   Object.entries(bins).forEach(([key, items]) => {
@@ -171,14 +170,14 @@ function drawPlot(list, latestId) {
   if (most >= 2) {
     const tops = inBins.filter(([, v]) => v.length === most).map(([k]) => Number(k)).sort((a, b) => a - b);
     const label = tops.map(k => (k / 100).toFixed(2)).join(', ') + '에 가장 많이 모였어요';
-    const w = Math.max(260, label.length * 18 + 50);
+    const w = Math.max(260, label.length * 23 + 56);
     let cx = tops.reduce((a, k) => a + X(k), 0) / tops.length;
     const ax = cx;
     cx = Math.min(Math.max(cx, L + w / 2 - 40), R - w / 2 + 40);
     const ty = base - 16 - step * most - 22;
-    s += `<rect x="${cx - w / 2}" y="${ty - 56}" width="${w}" height="50" rx="25" fill="#2d2a26"/>`;
+    s += `<rect x="${cx - w / 2}" y="${ty - 62}" width="${w}" height="56" rx="28" fill="#2d2a26"/>`;
     s += `<path d="M${ax - 10} ${ty - 7} L${ax} ${ty + 7} L${ax + 10} ${ty - 7}z" fill="#2d2a26"/>`;
-    s += `<text x="${cx}" y="${ty - 22}" font-family="Jua" font-size="24" fill="#fff" text-anchor="middle">${label}</text>`;
+    s += `<text x="${cx}" y="${ty - 24}" font-family="Jua" font-size="30" fill="#fff" text-anchor="middle">${label}</text>`;
   }
   $('g').innerHTML = s;
 }
