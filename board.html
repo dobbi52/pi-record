@@ -118,9 +118,9 @@ function drawTable(list, latestId) {
 }
 
 function drawPlot(list, latestId) {
-  const L = 170, R = 830, base = 470, topY = 20;
+  const L = 135, R = 865, base = 470, topY = 20;
   const X = k => L + (k - LO) / (HI - LO) * (R - L);
-  const LX = 62, RX = 938;
+  const LX = 52, RX = 948;
   const bins = {};
   list.slice().sort((a, b) => a.t - b.t).forEach(r => {
     const k = Math.round(r.r * 100);
@@ -128,8 +128,8 @@ function drawPlot(list, latestId) {
     (bins[key] = bins[key] || []).push(r);
   });
   const maxStack = Math.max(1, ...Object.values(bins).map(b => b.length));
-  const step = Math.min(23, (base - 14 - topY - 80) / maxStack);
-  const rad = Math.max(3.5, Math.min(10, step * 0.45));
+  const step = Math.min(27, (base - 16 - topY - 80) / maxStack);
+  const rad = Math.max(4, Math.min(12.5, step * 0.47));
   let s = '';
 
   s += `<rect x="${L - 14}" y="${base - 6}" width="${R - L + 28}" height="12" rx="6" fill="#f3e7d2"/>`;
@@ -146,17 +146,18 @@ function drawPlot(list, latestId) {
   }
   s += `<text x="${(L + R) / 2}" y="${base + 104}" font-family="Gowun Dodum" font-size="22" fill="#7a7368" text-anchor="middle">원주 ÷ 지름</text>`;
 
-  [['L', LX, '3.0보다 작아요'], ['R', RX, '3.3보다 커요']].forEach(([k, x, t]) => {
-    s += `<rect x="${x - 56}" y="${topY}" width="112" height="${base - topY + 6}" rx="18" fill="#faf6ef" stroke="#e2d8c6" stroke-width="2" stroke-dasharray="6 6"/>`;
-    s += `<text x="${x}" y="${base + 40}" font-family="Jua" font-size="19" fill="#9b9283" text-anchor="middle">${t}</text>`;
-    s += `<text x="${x}" y="${base + 66}" font-family="Gowun Dodum" font-size="17" fill="#9b9283" text-anchor="middle">다시 재 볼까요?</text>`;
+  [['L', LX, '3.0보다', '작아요'], ['R', RX, '3.3보다', '커요']].forEach(([k, x, t1, t2]) => {
+    s += `<rect x="${x - 46}" y="${topY}" width="92" height="${base - topY + 6}" rx="18" fill="#faf6ef" stroke="#e2d8c6" stroke-width="2" stroke-dasharray="6 6"/>`;
+    s += `<text x="${x}" y="${base + 38}" font-family="Jua" font-size="19" fill="#9b9283" text-anchor="middle">${t1}</text>`;
+    s += `<text x="${x}" y="${base + 60}" font-family="Jua" font-size="19" fill="#9b9283" text-anchor="middle">${t2}</text>`;
+    s += `<text x="${x}" y="${base + 84}" font-family="Gowun Dodum" font-size="15" fill="#9b9283" text-anchor="middle">다시 재 볼까요?</text>`;
   });
 
   Object.entries(bins).forEach(([key, items]) => {
     const out = key === 'L' || key === 'R';
     const x = key === 'L' ? LX : key === 'R' ? RX : X(Number(key));
     items.forEach((r, i) => {
-      const y = base - 14 - step * i - rad;
+      const y = base - 16 - step * i - rad;
       const isNew = r.id === latestId;
       const fill = isNew ? '#f08a3c' : out ? '#bdb5a6' : '#8b5cf6';
       if (isNew) s += `<circle cx="${x}" cy="${y}" r="${rad + 7}" fill="#f08a3c" fill-opacity=".22"/>`;
@@ -174,7 +175,7 @@ function drawPlot(list, latestId) {
     let cx = tops.reduce((a, k) => a + X(k), 0) / tops.length;
     const ax = cx;
     cx = Math.min(Math.max(cx, L + w / 2 - 40), R - w / 2 + 40);
-    const ty = base - 14 - step * most - 22;
+    const ty = base - 16 - step * most - 22;
     s += `<rect x="${cx - w / 2}" y="${ty - 56}" width="${w}" height="50" rx="25" fill="#2d2a26"/>`;
     s += `<path d="M${ax - 10} ${ty - 7} L${ax} ${ty + 7} L${ax + 10} ${ty - 7}z" fill="#2d2a26"/>`;
     s += `<text x="${cx}" y="${ty - 22}" font-family="Jua" font-size="24" fill="#fff" text-anchor="middle">${label}</text>`;
